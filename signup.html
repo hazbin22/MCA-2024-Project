@@ -1,0 +1,270 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+
+#bg {
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: top;
+    background-attachment: fixed;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f2f2f2;
+    background-image: url('images/1.webp');
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 5px;
+    box-shadow: 0px 0px 10px 0px #888888;
+    width: 80%;
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+label {
+    width: 100%;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input[type="text"],
+input[type="tel"],
+input[type="password"],
+input[type="date"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+input[type="radio"] {
+    margin-right: 10px;
+}
+
+.gender {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+input[type="submit"] {
+    background-color: #6EB5FF;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: bold;
+}
+
+input[type="submit"]:hover {
+    background-color: #4a90e2;
+}
+
+.error-message {
+    color: #ff0000;
+    margin-top: -15px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+/* Style for the gender field container */
+.gender-field {
+    margin-right: 350px;
+    margin-bottom: 10px;
+}
+
+/* Style for the gender label */
+.gender-field label {
+    display: block;
+    font-weight: bold;
+}
+
+/* Style for the gender select dropdown */
+.gender-field select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+
+    </style>
+</head>
+<body id="bg" style="background-image: url('images/1.webp');">
+    <div class="container">
+        <h2>Register</h2>
+        <form action="" method="post" onsubmit="return validateForm()">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <label for="id">ID:</label>
+            <input type="text" id="id" name="id" required> <br>
+
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required> <br>
+
+            <div class="gender-field">
+                <label for="gender">Gender:</label>
+                <select id="gender" name="gender" required>
+                    <option value="M">Male</option>
+                    <option value="F">Female</option>
+                    <option value="O">Other</option>
+                </select>
+            </div>
+
+            <label for="date_of_birth">Date of Birth:</label>
+            <input type="date" id="date_of_birth" name="date_of_birth" required><br>
+
+            <label for="address1">Building/House Name:</label>
+            <input type="text" id="address1" name="address1" required> <br>
+
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" required> <br>
+
+            <label for="place">City:</label>
+            <input type="text" id="place" name="place" required> <br>
+
+            <label for="place">District:</label>
+            <input type="text" id="district" name="district" required> <br>
+
+            <label for="pincode">Pincode:</label>
+            <input type="text" id="pincode" name="pincode" required> <br>
+
+            <label for="phone">Phone Number:</label>
+            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required> <br>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <label for="confirm_password">Confirm Password:</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
+
+            <input type="submit" value="Register">
+
+        </form>
+
+        <script>
+            // JavaScript validation function
+            function validateForm() {
+                var id = document.getElementById("id").value;
+                var name = document.getElementById("name").value;
+                var gender = document.getElementById("gender").value;
+                var dateOfBirth = document.getElementById("date_of_birth").value;
+                var address1 = document.getElementById("address1").value;
+                var street = document.getElementById("street").value;
+                var place = document.getElementById("place").value;
+                var district = document.getElementById("district").value;
+                var pincode = document.getElementById("pincode").value;
+                var phone = document.getElementById("phone").value;
+                var password = document.getElementById("password").value;
+                var confirmPassword = document.getElementById("confirm_password").value;
+        
+                // Regular expressions for validation
+                var idPattern = /^[A-Za-z0-9]+$/;
+                var namePattern = /^[A-Za-z\s]+$/;
+                var pincodePattern = /^\d{6}$/;
+                var phonePattern = /^\d{10}$/;
+        
+                // Validation checks
+                if (!id.match(idPattern) || id.length < 6) {
+                    alert("ID must contain at least 6 alphanumeric characters.");
+                    return false;
+                }
+        
+                if (!name.match(namePattern)) {
+                    alert("Name must contain only letters and spaces.");
+                    return false;
+                }
+        
+                if (gender === "") {
+                    alert("Please select a gender.");
+                    return false;
+                }
+        
+                if (dateOfBirth === "") {
+                    alert("Please enter your date of birth.");
+                    return false;
+                }
+        
+                if (address1 === "") {
+                    alert("Building/House Name is required.");
+                    return false;
+                }
+        
+                if (street === "") {
+                    alert("Street is required.");
+                    return false;
+                }
+        
+                if (place === "") {
+                    alert("City is required.");
+                    return false;
+                }
+        
+                if (district === "") {
+                    alert("District is required.");
+                    return false;
+                }
+        
+                if (!pincode.match(pincodePattern)) {
+                    alert("Pincode must be a 6-digit number.");
+                    return false;
+                }
+        
+                if (!phone.match(phonePattern)) {
+                    alert("Phone number must be a 10-digit number.");
+                    return false;
+                }
+        
+                if (password.length < 8) {
+                    alert("Password must be at least 8 characters long.");
+                    return false;
+                }
+        
+                if (password !== confirmPassword) {
+                    alert("Passwords do not match.");
+                    return false;
+                }
+        
+                // If all validations pass, allow the form submission
+                return true;
+            }
+        </script>
+        
+        
+        
+        
+    </div>
+</body>
+</html>
