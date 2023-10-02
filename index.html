@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Online Pharmacy</title>
     <style>
-        /* Add your CSS styles for layout and design here */
+
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
             background-color: #f5f5f5;
             margin: 0;
             padding: 0;
         }
 
         header {
-            background-color: #4394eb;
+            background-color: #de198985;
             color: #fff;
             text-align: center;
             padding: 10px;
@@ -29,49 +29,47 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* Add more styles for buttons, product listings, etc. */
-
         /* Style for navigation links */
         .nav-links {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
-            color: #fff;
+            margin-bottom: 10px;
         }
 
         .nav-links a {
             text-decoration: none;
-            color:black;
-            margin: 0 20px;
+            color: white;
+            margin-top: 30px;
+            margin-right: 40px;
             font-weight: bold;
-            margin-top: 26px;
         }
-        #logo {
-            font-size: 24px; /* Adjust the font size as needed */
-            font-weight: bold; /* Make the text bold */
-            text-decoration: none; /* Remove underlines from the link */
-            margin-left: 0px; /* Add spacing to the right of the logo */
-            margin-top: 20px;
-            color: #fff; /* Text color for the logo */
-        }
+
         /* Style for active link */
         .nav-links a.active {
             color: #fff;
         }
+        #logo {
+            font-size: 39px; 
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-weight: bold; 
+            text-decoration: none;
+            margin-top: 20px; 
+            margin-right: 700px; 
+            color: #fff;
+        }
     </style>
 </head>
-<body>
-    <header>
+<body><header>
         <!-- Navigation links -->
         <div class="nav-links">
-            <div id="logo"><a href="{% url 'index' %}">PHARMIO</a></div>
-            <a class="nav-link active" href="{% url 'index' %}">Home</a>
-            <a class="nav-link " href="#">Shop</a>
-            <a class="nav-link " href="{% url 'login' %}">Login</a>
-            <a class="nav-link " href="{% url 'signup' %}">Signup</a>
+            <div id="logo"><a href="">PHARMIO</a></div>
+            <a class="nav-link" href="">Home</a>
+            <a class="nav-link" href="">Shop</a>
+            <a class="nav-link" href="">Login</a>
+            <a class="nav-link" href="{% url 'register' %}">Register</a>
         </div>
     </header>
-    <!-- Your content here -->
+    
 
 </body>
 </html>
