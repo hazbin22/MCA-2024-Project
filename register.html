@@ -124,43 +124,16 @@
 <body id="bg" style="background-image: url('images/1.webp');">
     <div class="container">
         <h2>Register</h2>
-        <form action="" method="post" onsubmit="return validateForm()">
+        <form action="" method="POST">
             <!-- CSRF token -->
             {% csrf_token %}
 
             <!-- Form fields -->
-            <label for="id">ID:</label>
-            <input type="text" id="id" name="id" required> <br>
+            <label for="username">Username:</label>
+            <input type="text" id="id" name="username"> <br>
 
             <label for="name">Name:</label>
             <input type="text" id="name" name="name" required> <br>
-
-            <div class="gender-field">
-                <label for="gender">Gender:</label>
-                <select id="gender" name="gender" required>
-                    <option value="M">Male</option>
-                    <option value="F">Female</option>
-                    <option value="O">Other</option>
-                </select>
-            </div>
-
-            <label for="date_of_birth">Date of Birth:</label>
-            <input type="date" id="date_of_birth" name="date_of_birth" required><br>
-
-            <label for="address1">Building/House Name:</label>
-            <input type="text" id="address1" name="address1" required> <br>
-
-            <label for="street">Street:</label>
-            <input type="text" id="street" name="street" required> <br>
-
-            <label for="place">City:</label>
-            <input type="text" id="place" name="place" required> <br>
-
-            <label for="district">District:</label>
-            <input type="text" id="district" name="district" required> <br>
-
-            <label for="pincode">Pincode:</label>
-            <input type="text" id="pincode" name="pincode" required> <br>
 
             <label for="phone">Phone Number:</label>
             <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" required> <br>
@@ -181,102 +154,86 @@
 
         <script>
             // JavaScript validation function
-            function validateForm() {
-                var id = document.getElementById("id").value;
-                var name = document.getElementById("name").value;
-                var gender = document.getElementById("gender").value;
-                var dateOfBirth = document.getElementById("date_of_birth").value;
-                var address1 = document.getElementById("address1").value;
-                var street = document.getElementById("street").value;
-                var place = document.getElementById("place").value;
-                var district = document.getElementById("district").value;
-                var pincode = document.getElementById("pincode").value;
-                var phone = document.getElementById("phone").value;
-                var email = document.getElementById("email").value;
-                var password = document.getElementById("password").value;
-                var confirmPassword = document.getElementById("confirm_password").value;
+            // Get references to all input fields
+            var idInput = document.getElementById("id");
+            var nameInput = document.getElementById("name");
+            var genderInput = document.getElementById("gender");
+            var dateOfBirthInput = document.getElementById("date_of_birth");
+            var address1Input = document.getElementById("address1");
+            var streetInput = document.getElementById("street");
+            var placeInput = document.getElementById("place");
+            var districtInput = document.getElementById("district");
+            var pincodeInput = document.getElementById("pincode");
+            var phoneInput = document.getElementById("phone");
+            var emailInput = document.getElementById("email");
+            var passwordInput = document.getElementById("password");
+            var confirmPasswordInput = document.getElementById("confirm_password");
+            var errorMessage = document.getElementById("error-message");
 
-                // Regular expressions for validation
-                var idPattern = /^[A-Za-z0-9]+$/;
-                var namePattern = /^[A-Za-z\s]+$/;
-                var pincodePattern = /^\d{6}$/;
-                var phonePattern = /^\d{10}$/;
-                var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            // Regular expressions for validation
+            var idPattern = /^[A-Za-z0-9]+$/;
+            var namePattern = /^[A-Za-z\s]+$/;
+            var pincodePattern = /^\d{6}$/;
+            var phonePattern = /^\d{10}$/;
+            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
-                // Validation checks
+            // Add event listeners to input fields
+            idInput.addEventListener("input", validateId);
+            nameInput.addEventListener("input", validateName);
+            genderInput.addEventListener("input", validateGender);
+            dateOfBirthInput.addEventListener("input", validateDateOfBirth);
+            address1Input.addEventListener("input", validateAddress1);
+            streetInput.addEventListener("input", validateStreet);
+            placeInput.addEventListener("input", validatePlace);
+            districtInput.addEventListener("input", validateDistrict);
+            pincodeInput.addEventListener("input", validatePincode);
+            phoneInput.addEventListener("input", validatePhone);
+            emailInput.addEventListener("input", validateEmail);
+            passwordInput.addEventListener("input", validatePassword);
+            confirmPasswordInput.addEventListener("input", validateConfirmPassword);
+
+            // Validation functions
+            function validateId() {
+                var id = idInput.value;
                 if (!id.match(idPattern) || id.length < 6) {
                     showError("ID must contain at least 6 alphanumeric characters.");
-                    return false;
+                } else {
+                    showError("");
                 }
+            }
 
+            function validateName() {
+                var name = nameInput.value;
                 if (!name.match(namePattern)) {
                     showError("Name must contain only letters and spaces.");
-                    return false;
+                } else {
+                    showError("");
                 }
-
-                if (gender === "") {
-                    showError("Please select a gender.");
-                    return false;
-                }
-
-                if (dateOfBirth === "") {
-                    showError("Please enter your date of birth.");
-                    return false;
-                }
-
-                if (address1 === "") {
-                    showError("Building/House Name is required.");
-                    return false;
-                }
-
-                if (street === "") {
-                    showError("Street is required.");
-                    return false;
-                }
-
-                if (place === "") {
-                    showError("City is required.");
-                    return false;
-                }
-
-                if (district === "") {
-                    showError("District is required.");
-                    return false;
-                }
-
-                if (!pincode.match(pincodePattern)) {
-                    showError("Pincode must be a 6-digit number.");
-                    return false;
-                }
-
-                if (!phone.match(phonePattern)) {
-                    showError("Phone number must be a 10-digit number.");
-                    return false;
-                }
-
-                if (!email.match(emailPattern)) {
-                    showError("Invalid email address.");
-                    return false;
-                }
-
-                if (password.length < 8) {
-                    showError("Password must be at least 8 characters long.");
-                    return false;
-                }
-
-                if (password !== confirmPassword) {
-                    showError("Passwords do not match.");
-                    return false;
-                }
-
-                // If all validations pass, allow the form submission
-                return true;
             }
 
-            function showError(message) {
-                var errorMessage = document.getElementById("error-message");
-                errorMessage.textContent = message;
-            }
+            // Implement similar validate functions for other fields
+
+function validatePassword() {
+    var password = passwordInput.value;
+    if (password.length < 8) {
+        showError("Password must be at least 8 characters long.");
+    } else {
+        showError("");
+    }
+}
+
+function validateConfirmPassword() {
+    var password = passwordInput.value;
+    var confirmPassword = confirmPasswordInput.value;
+    if (password !== confirmPassword) {
+        showError("Passwords do not match.");
+    } else {
+        showError("");
+    }
+}
+
+// You can implement the remaining validate functions for other fields in a similar manner
+
         </script>
     </div>
 </body>
