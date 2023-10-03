@@ -1,19 +1,13 @@
 from django.db import models
 
 # Create your models here.
-class LoginDetails(models.Model):
-    user_id=models.AutoField(primary_key=True)
-    password=models.CharField(max_length=10)
-    type=models.CharField(max_length=10)
-    status=models.BinaryField()
-
-
-class AddressDetails(models.Model):
-    user_id = models.OneToOneField(LoginDetails, primary_key=True, on_delete=models.CASCADE)  # OneToOneField to LoginDetails
-    buildingname = models.CharField(max_length=255)
-    street = models.CharField(max_length=255)
-    place = models.CharField(max_length=255)
-    district = models.CharField(max_length=255)
-    pincode = models.CharField(max_length=6)
-    phone_number = models.CharField(max_length=10)
-    status = models.BinaryField()
+class User(models.Model):
+    username=models.CharField(max_length=50)
+    name=models.CharField(max_length=50)
+    email=models.EmailField()
+    phno=models.CharField(max_length=12, blank=True, null=True)
+    password=models.CharField(max_length=50)
+    confirm_pass=models.CharField(max_length=50)
+    def __str__ (self):
+        return self.name,self.email,self.phno,self.password
+    
