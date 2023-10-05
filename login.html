@@ -64,7 +64,7 @@
             font-weight: bold;
         }
         input[type="submit"]:hover {
-            background-color: #6EB5FF;
+            background-color: #287bd4;
         }
         .error-message {
             color: #ff0000;
@@ -73,56 +73,80 @@
             font-size: 14px;
         }
         .register-link {
-            text-align: center;
+            text-align: left;
             margin-top: 10px;
         }
+        .forgot-password-link {
+            text-align: left;
+            margin-top: 0px;
+        }
+        
     </style>
 </head>
-<body>
+<body >
     <div class="container">
         <h2>Login</h2>
-        <form action="" method="post" onsubmit="return validateForm()">
+        <form action="" method="post">
             {% csrf_token %}  
-            <label for="username">User ID:</label>
-            <input type="text" id="username" name="username">
+            <input type="text" id="username" name="email" placeholder="Username/Email">
+            <span id="email-error" class="error-message"></span>
+    
+            <input type="password" id="password" name="password" placeholder="Enter Your Password">
+            <span id="password-error" class="error-message"></span>
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password">
-
-            <input type="submit" value="Log In">
+            <p class="forgot-password-link">Forgot your password? <a href="#" id="forgot-password-link">Reset it here</a></p>
+    
+            <input class="login" type="submit" value="Log In">
         </form>
-        <!-- Removed duplicated script tags -->
-        <p class="register-link">Not a member? <a href="{% url 'register' %}">Register here</a></p>
+        <br>
+        <p class="register-link">Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
     </div>
+    
     <script>
-        // JavaScript validation function
-        function validateForm() {
-            var username = document.getElementById("username").value;
-            var password = document.getElementById("password").value;
-
-            // Check if username is empty
-            if (username === "") {
-                alert("Username is required.");
-                return false; // Prevent form submission
+        // Event listeners for on-the-fly validation
+        document.getElementById("username").addEventListener("input", validateEmailOrUsername);
+        document.getElementById("password").addEventListener("input", validatePassword);
+    
+        function validateEmailOrUsername() {
+            var emailInput = document.getElementById("username");
+            var emailError = document.getElementById("email-error");
+            var isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
+    
+            if (!isValid) {
+                emailError.textContent = "Invalid email address";
+            } else {
+                emailError.textContent = "";
             }
-
-            // Check if password is empty
-            if (password === "") {
-                alert("Password is required.");
-                return false; // Prevent form submission
-            }
-
-            // Check minimum length for the password
-            if (password.length < 8) {
-                alert("Password must be at least 8 characters long.");
-                return false; // Prevent form submission
-            }
-
-            // Additional text validation checks can be added here
-
-            // If all checks pass, allow form submission
-            return true;
         }
+    
+        function validatePassword() {
+            var passwordInput = document.getElementById("password");
+            var passwordError = document.getElementById("password-error");
+            var isValid = passwordInput.value.length >= 8 && !/\s/.test(passwordInput.value);
+    
+            if (!isValid) {
+                passwordError.textContent = "Invalid password (minimum 8 characters, no spaces)";
+            } else {
+                passwordError.textContent = "";
+            }
+        }
+    
+        // Additional functionality for the "Forgot Password" link can be added here
+        var forgotPasswordLink = document.getElementById("forgot-password-link");
+        forgotPasswordLink.addEventListener("click", function(event) {
+            event.preventDefault();
+            // Implement logic to handle "Forgot Password" functionality, e.g., show a modal or redirect to a reset password page
+        });
     </script>
+    
+    <style>
+        .error-message {
+            color: red;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+    </style>
+    
 </body>
 </html>
