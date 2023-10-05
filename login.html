@@ -1,4 +1,4 @@
-{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +8,7 @@
     <style>
          #bg {
             background-repeat: no-repeat;
-            background-image: url ("{% static '/images/image1.jpeg' %}");
+            background-image: url("images/img5.jpg");
             background-size: cover;
             background-position: top;
             background-attachment: fixed;
@@ -24,7 +24,7 @@
             min-height: 100vh;
         }
         .container {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.46);
             border-radius: 5px;
             box-shadow: 0px 0px 10px 0px #888888;
             width: 80%;
@@ -83,11 +83,10 @@
         
     </style>
 </head>
-<body >
+<body id="bg">
     <div class="container">
         <h2>Login</h2>
-        <form action="" method="post">
-            {% csrf_token %}  
+        <form action="" method="post"> 
             <input type="text" id="username" name="email" placeholder="Username/Email">
             <span id="email-error" class="error-message"></span>
     
@@ -99,7 +98,7 @@
             <input class="login" type="submit" value="Log In">
         </form>
         <br>
-        <p class="register-link">Don't have an account? <a href="{% url 'register' %}">Register here</a></p>
+        <p class="register-link">Don't have an account? <a href="register.html">Register here</a></p>
     </div>
     
     <script>
