@@ -1,52 +1,40 @@
 <?php
-session_start();
-include("db_config.php");
+include('db_config.php');
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Retrieve data from the form
-    $building_or_house = $_POST["address1"];
-    $street = $_POST["street"];
-    $city = $_POST["place"];
-    $district = $_POST["district"];
-    $pincode = $_POST["pincode"];
-    $phone = $_POST["phone"];
-    
-    // Retrieve other customer details from the form
-    $username = $_POST["email"];
-    $fname = $_POST["fname"];
-    $lname = $_POST["lname"];
-    $gender = $_POST["gender"];
-    $dateOfBirth = $_POST["date_of_birth"];
-    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
+    $username = $_POST['email'];
+    $first_name = $_POST['fname'];
+    $last_name = $_POST['lname'];
+    $gender = $_POST['gender'];
+    $dob = $_POST['date_of_birth'];
+    $password = $_POST['password'];
 
-    // Set default status to 1 (active) for both address and customer
-    $status = 1;
-    $role = 'C'; // Default role set to Customer
+    // Perform basic server-side validation
+    if (empty($username) || empty($first_name) || empty($last_name) || empty($gender) || empty($dob) || empty($password)) {
+        echo "Please fill out all the fields.";
+    }else {
+        // Hash the password using MD5 (not recommended for production)
+        $hashed_password = md5($password);
 
-    // Insert address details into address_details table
-    $addressQuery = "INSERT INTO address_details (building_or_house, street, city, district, pincode, phone, status) 
-                     VALUES ('$building_or_house', '$street', '$city', '$district', '$pincode', '$phone', '$status')";
-    $conn->query($addressQuery);
-    $addressId = $conn->insert_id; // Get the ID of the inserted address record
+        // SQL query to insert user into the database
+        $sql = "INSERT INTO customer_details (username, first_name, last_name, gender, dob, password )
+                VALUES ('$username', '$first_name', '$last_name', '$gender', '$dob', '$hashed_password')";
 
-    // Insert customer details into customer_details table with the address_id and status
-    $customerQuery = "INSERT INTO customer_details (first_name, last_name, gender, date_of_birth, address_id, role, status) 
-                      VALUES ('$fname', '$lname', '$gender', '$dateOfBirth', '$addressId', '$role', '$status')";
-    $conn->query($customerQuery);
-
-    // Insert login details into login_details table
-    $loginQuery = "INSERT INTO login_details (username, password, type, status) 
-                   VALUES ('$username', '$password', 'Customer', '$status')";
-    $conn->query($loginQuery);
-
-    // Redirect to a success page or login page after registration
-    header("Location: login.php");
-    exit();
+        if ($conn->query($sql) === TRUE) {
+            echo "User registered successfully!";
+            header('Location: login.php');
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+    }
 }
+
+$conn->close();
 ?>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -224,18 +212,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 });
             </script>
 
-            <input type="text" id="address1" name="address1" placeholder="Building/House Name"><br>
-
-            <input type="text" id="street" name="street" placeholder="Street"><br>
-            
-            <input type="text" id="place" name="place" placeholder="City"><br>
-            
-            <input type="text" id="district" name="district" placeholder="District"><br>
-            
-            <input type="text" id="pincode" name="pincode" placeholder="Pincode"><br>
-            
-            <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" placeholder="Phone Number"><br>
-            
 
             <input type="password" id="password" name="password" placeholder="Password">
             <span id="password-error" class="error-message"></span>

@@ -1,4 +1,54 @@
 
+<?php
+include('db_config.php');
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['email'];
+    $password = $_POST['password'];
+
+    $hashed_password = md5($password);
+
+    // Check if the user is a client
+    $sql_cust = "SELECT * FROM customer_details WHERE username='$username' AND password='$hashed_password'";
+    $result_cust = $conn->query($sql_cust);
+
+    if (!$result_cust) {
+        die("SQL query failed: " . $conn->error);
+    }
+
+    if ($result_cust->num_rows > 0) {
+        // Client login successful
+        echo "Login successful.";
+        header('Location: customer.php');
+        exit();
+    }
+
+    // Check if the user is an admin
+    $sql_admin = "SELECT * FROM admin WHERE username='$username' AND password='$hashed_password'";
+    $result_admin = $conn->query($sql_admin);
+
+    if (!$result_admin) {
+        die("SQL query failed: " . $conn->error);
+    }
+
+    if ($result_admin->num_rows > 0) {
+        // Admin login successful
+        echo "Admin login successful.";
+        header('Location: admin.php');
+        exit();
+    }
+
+    // If neither client nor admin, display an error message
+    echo "Invalid username or password. <a href='login.html'>Go back</a>";
+}
+
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,6 +136,7 @@
 <body id="bg">
     <div class="container">
         <h2>Login</h2>
+        
         <form action="" method="post"> 
             <input type="text" id="username" name="email" placeholder="Username/Email">
             <span id="email-error" class="error-message"></span>
@@ -93,7 +144,7 @@
             <input type="password" id="password" name="password" placeholder="Enter Your Password">
             <span id="password-error" class="error-message"></span>
 
-            <p class="forgot-password-link">Forgot your password? <a href="#" id="forgot-password-link">Reset it here</a></p>
+            <p class="forgot-password-link"><a href="#" id="forgot-password-link">Forgot your password? </a></p>
     
             <input class="login" type="submit" value="Log In">
         </form>
