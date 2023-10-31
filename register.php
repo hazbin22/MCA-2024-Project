@@ -14,9 +14,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = $_POST['password'];
 
     // Perform basic server-side validation
-    if (empty($username) || empty($first_name) || empty($last_name) || empty($gender) || empty($dob) || empty($password)) {
-        echo "Please fill out all the fields.";
-    }else {
+    // Check if the username already exists
+    $checkUsernameQuery = "SELECT * FROM customer_details WHERE username='$username'";
+    $result = $conn->query($checkUsernameQuery);
+
+    if ($result->num_rows > 0) {
+        echo "Username already exists. Please choose a different username.";
+    } else {
         // Hash the password using MD5 (not recommended for production)
         $hashed_password = md5($password);
 
@@ -31,6 +35,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "Error: " . $sql . "<br>" . $conn->error;
         }
     }
+
 }
 
 $conn->close();
@@ -45,8 +50,11 @@ $conn->close();
         /* CSS code goes here */
                 body {
             font-family: Arial, Helvetica, sans-serif;
-            background-color: #f2f2f2;
-            background-image: url('');
+            background-image: url('images/img11.jpg');
+            background-attachment: fixed;
+            background-position: top;
+            background-size: cover;
+            background-repeat: no-repeat;
             margin: 0;
             padding: 0;
             display: flex;
@@ -56,7 +64,7 @@ $conn->close();
         }
 
         .container {
-            background-color: #ffffff;
+            background-color: rgba(255, 255, 255, 0.5);
             border-radius: 5px;
             box-shadow: 0px 0px 10px 0px #888888;
             width: 80%;
@@ -96,6 +104,7 @@ $conn->close();
             margin-bottom: 15px;
             border: 1px solid #ccc;
             border-radius: 3px;
+            background-color: rgba(255, 255, 255, 0.5);
         }
 
         input[type="radio"] {
@@ -134,6 +143,7 @@ $conn->close();
         .gender-field {
             margin-right: 449px;
             margin-bottom: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
         }
 
         /* Style for the gender label */
@@ -168,6 +178,7 @@ $conn->close();
             border: 1px solid #ccc;
             border-radius: 3px;
         }
+        
     </style>
 </head>
 <body>
@@ -196,7 +207,6 @@ $conn->close();
             <br>
 
             <input type="text" id="date_of_birth" name="date_of_birth" value="Date of Birth" required><br>
-
             <script>
                 var dobInput = document.getElementById("date_of_birth");
 
@@ -211,7 +221,6 @@ $conn->close();
                     }
                 });
             </script>
-
 
             <input type="password" id="password" name="password" placeholder="Password">
             <span id="password-error" class="error-message"></span>
@@ -228,26 +237,39 @@ $conn->close();
                 document.getElementById("lname").addEventListener("input", validateName.bind(null, "lname"));
                 document.getElementById("password").addEventListener("input", validatePassword);
                 document.getElementById("confirm_password").addEventListener("input", validateConfirmPassword);
-                document.getElementById("address1").addEventListener("input", validateText.bind(null, "address1"));
-                document.getElementById("street").addEventListener("input", validateText.bind(null, "street"));
-                document.getElementById("place").addEventListener("input", validateText.bind(null, "place"));
-                document.getElementById("district").addEventListener("input", validateText.bind(null, "district"));
-                document.getElementById("pincode").addEventListener("input", validatePincode);
-                document.getElementById("phone").addEventListener("input", validatePhone);
+                
                 document.getElementById("date_of_birth").addEventListener("input", validateDateOfBirth);
 
                 function validateEmail() {
                     var emailInput = document.getElementById("email");
                     var emailError = document.getElementById("email-error");
-                    var isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
+                    var email = emailInput.value.trim(); // Trim spaces from the beginning and end
+                    var isValid = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+
+                    // Check for spaces at the beginning
+                    if (emailInput.value.indexOf(email) !== 0) {
+                        isValid = false;
+                    }
 
                     if (!isValid) {
                         emailError.textContent = "Invalid email address";
                     } else {
-                        emailError.textContent = "";
+                        // Check for additional conditions
+                        var atIndex = email.indexOf("@");
+                        var dotIndex = email.lastIndexOf(".");
+                        var domain = email.substring(atIndex + 1, dotIndex);
+
+                        if (atIndex < 1 || dotIndex - atIndex < 2 || domain.length < 1) {
+                            isValid = false;
+                        }
+
+                        if (!isValid) {
+                            emailError.textContent = "Invalid email address";
+                        } else {
+                            emailError.textContent = "";
+                        }
                     }
                 }
-
                 function validateName(inputId) {
                     var nameInput = document.getElementById(inputId);
                     var nameError = document.getElementById(inputId + "-error");
@@ -260,17 +282,22 @@ $conn->close();
                     }
                 }
 
-                function validateDateOfBirth() {
-                    var dobInput = document.getElementById("date_of_birth");
-                    var dobError = document.getElementById("date_of_birth-error");
-                    var isValid = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(dobInput.value); // Date format: YYYY-MM-DD
-                
-                    if (!isValid) {
-                        dobError.textContent = "Invalid date of birth (YYYY-MM-DD format)";
-                    } else {
-                        dobError.textContent = "";
+                function validateDOB() {
+                    var dobInput = document.getElementById("dob").value;
+                    var dob = new Date(dobInput);
+                    var today = new Date();
+                    var age = today.getFullYear() - dob.getFullYear();
+
+                    if (today.getMonth() < dob.getMonth() || (today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) {
+                        age--;
                     }
-                }                
+
+                    if (age < 18) {
+                        document.getElementById("dob-error").textContent = "You must be 18 years or older.";
+                    } else {
+                        document.getElementById("dob-error").textContent = "";
+                    }
+                }              
 
                 function validatePassword() {
                     var passwordInput = document.getElementById("password");
@@ -343,6 +370,7 @@ $conn->close();
                     display: block;
                 }
             </style>
+    
 
     </div>
 </body>

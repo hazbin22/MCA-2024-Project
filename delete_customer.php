@@ -1,22 +1,23 @@
 <?php
 include('db_config.php');
 
-if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET['username'])) {
-    $username = $_GET['user_id'];
 
-    // Perform the deletion
-    $deleteQuery = "DELETE FROM customer_details WHERE user_id = '$username'";
+if (isset($_GET['id'])) {
+    $userId = $_GET['id'];
+    // SQL query to delete the user by ID
+    $sql = "DELETE FROM customer_details WHERE username='$username'";
 
-    if ($conn->query($deleteQuery) === TRUE) {
-        // Redirect to customer_view.php with success message
-        header("Location: customer_view.php?success=Customer deleted successfully");
-        exit();
+    if ($conn->query($sql) === TRUE) {
+        // Redirect with success message
+        header("Location: customer_view.php?success=User successfully deleted");
     } else {
-        // Redirect to customer_view.php with error message
-        header("Location: customer_view.php?error=Error deleting customer: " . $conn->error);
-        exit();
+        // Redirect with error message
+        header("Location: customer_view.php?error=Error deleting user: " . $conn->error);
     }
-}
 
-$conn->close();
+    $conn->close();
+} else {
+    // Redirect with error message if no user ID is provided
+    header("Location: customer_view.php?error=Invalid user ID");
+}
 ?>

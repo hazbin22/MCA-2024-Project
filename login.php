@@ -2,6 +2,8 @@
 <?php
 include('db_config.php');
 
+session_start();
+
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -13,6 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hashed_password = md5($password);
 
     // Check if the user is a client
+    echo "SQL query: " . $sql_cust; // Before executing the query
+
     $sql_cust = "SELECT * FROM customer_details WHERE username='$username' AND password='$hashed_password'";
     $result_cust = $conn->query($sql_cust);
 
@@ -22,7 +26,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result_cust->num_rows > 0) {
         // Client login successful
-        echo "Login successful.";
+        $_SESSION['username'] = $username; // Set session variable  
         header('Location: customer.php');
         exit();
     }
@@ -37,13 +41,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($result_admin->num_rows > 0) {
         // Admin login successful
-        echo "Admin login successful.";
+        $_SESSION['admin'] = $username;
         header('Location: admin.php');
         exit();
     }
 
     // If neither client nor admin, display an error message
-    echo "Invalid username or password. <a href='login.html'>Go back</a>";
+    echo "<script>alert('Invalid username or password. Please try again.'); window.location.href='login.php';</script>";
+
 }
 
 $conn->close();
@@ -56,7 +61,7 @@ $conn->close();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <style>
-         #bg {
+        #bg {
             background-repeat: no-repeat;
             background-image: url("images/img5.jpg");
             background-size: cover;
@@ -123,17 +128,48 @@ $conn->close();
             font-size: 14px;
         }
         .register-link {
-            text-align: left;
+            text-align: center;
             margin-top: 10px;
         }
         .forgot-password-link {
-            text-align: left;
+            text-align: center;
             margin-top: 0px;
         }
+        .google-signup {
+            text-align: center;
+            margin-top: 20px; /* Adjust the margin-top value as needed */
+        }
+
+        .google-signup img {
+            width: 30px; /* Set the width of the Google logo */
+            margin-right: 5px;
+        }
+        .google-signup a{
+            all: unset;
+            cursor: pointer;
+            padding: 8px;
+            display: flex;
+            width: 340px;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid rgba(0, 0, 0, .2);
+            border-radius: 3px;
+            margin-left:0px;
+            }
+        a:hover{
+            background-color: #f9f9f9;
+        }
+        img{
+            width: 50px;
+            margin-right: 5px;   
+        }
+        
         
     </style>
 </head>
-<body id="bg">
+<body id="bg">`
     <div class="container">
         <h2>Login</h2>
         
@@ -144,12 +180,15 @@ $conn->close();
             <input type="password" id="password" name="password" placeholder="Enter Your Password">
             <span id="password-error" class="error-message"></span>
 
-            <p class="forgot-password-link"><a href="#" id="forgot-password-link">Forgot your password? </a></p>
+            <p class="forgot-password-link"><a href="forgot_password.php" id="forgot-password-link">Forgot your password? </a></p>
     
             <input class="login" type="submit" value="Log In">
         </form>
         <br>
-        <p class="register-link">Don't have an account? <a href="register.html">Register here</a></p>
+        <p class="register-link">Don't have an account? <a href="register.php">Register here</a></p>
+        <div class="google-signup">
+            <a href="<?= $login_url ?>"><img src="https://tinyurl.com/46bvrw4s" alt="Google Logo"> Sign up with Google</a>
+        </div>
     </div>
     
     <script>
@@ -157,17 +196,24 @@ $conn->close();
         document.getElementById("username").addEventListener("input", validateEmailOrUsername);
         document.getElementById("password").addEventListener("input", validatePassword);
     
-        function validateEmailOrUsername() {
-            var emailInput = document.getElementById("username");
-            var emailError = document.getElementById("email-error");
-            var isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailInput.value);
-    
-            if (!isValid) {
-                emailError.textContent = "Invalid email address";
+        // Get the email input field
+        var emailInput = document.getElementById("email");
+
+        // Add an event listener for the input event (when user types)
+        emailInput.addEventListener("input", function() {
+            var email = emailInput.value;
+            var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            // Validate the email address
+            if (emailRegex.test(email)) {
+                // Valid email address, you can add further actions here
+                console.log("Valid email address: " + email);
             } else {
-                emailError.textContent = "";
+                // Invalid email address, you can add error messages or styles here
+                console.log("Invalid email address: " + email);
             }
-        }
+        });
+
     
         function validatePassword() {
             var passwordInput = document.getElementById("password");
