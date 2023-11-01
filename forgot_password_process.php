@@ -1,41 +1,61 @@
 <?php
-    include('db_config.php'); // Include your database configuration file
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $email = $_POST['email'];
+require 'vendor/autoload.php'; // Include PHPMailer autoloader
 
-        // Check if the email exists in the database
-        $sql = "SELECT * FROM customer_details WHERE username='$email'";
-        $result = $conn->query($sql);
+include('db_config.php'); // Include your database configuration file
 
-        if ($result->num_rows == 1) {
-            // Generate a unique token
-            $resetToken = bin2hex(random_bytes(32)); // Generate a random token (you can adjust the length as needed)
-            
-            // Set the token and expiry time in the database
-            $expiryTime = date('Y-m-d H:i:s', strtotime('+1 hour')); // Token expires in 1 hour
-            $updateTokenQuery = "UPDATE customer_details SET reset_token='$resetToken', reset_token_expiry='$expiryTime' WHERE username='$email'";
-            
-            if ($conn->query($updateTokenQuery) === TRUE) {
-                // Send the reset email with a link containing the token
-                $resetLink = "http://yourwebsite.com/reset_password.php?token=$resetToken";
-                $to = $email;
-                $subject = "Password Reset";
-                $message = "Click the following link to reset your password: $resetLink";
-                $headers = "From: fathimahazbin1234@.com"; // Set your email address here
-                
-                if (mail($to, $subject, $message, $headers)) {
-                    echo "Password reset email sent. Please check your email.";
-                } else {
-                    echo "Failed to send reset email. Please try again later.";
-                }
-            } else {
-                echo "Error updating token: " . $conn->error;
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST['email'];
+
+    // Check if the email exists in the database
+    $sql = "SELECT * FROM customer_details WHERE username='$username'";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows == 1) {
+        // Generate a unique token
+        $resetToken = bin2hex(random_bytes(32)); // Generate a random token (you can adjust the length as needed)
+        
+        // Set the token and expiry time in the database
+        $expiryTime = date('Y-m-d H:i:s', strtotime('+1 hour')); // Token expires in 1 hour
+        $updateTokenQuery = "UPDATE customer_details SET reset_token='$resetToken', reset_token_expiry='$expiryTime' WHERE username='$username'";
+        
+        if ($conn->query($updateTokenQuery) === TRUE) {
+            // Send the reset email with a link containing the token using PHPMailer
+            $mail = new PHPMailer(true);
+
+            try {
+                //Server settings
+                $mail->isSMTP();
+                $mail->Host       = 'smtp.gmail.com'; // Set your SMTP server
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'fathimahazbin1234@gmail.com'; // SMTP username
+                $mail->Password   = 'hkfv mtxt qdls exnv'; // SMTP password
+                $mail->SMTPSecure = 'tls';
+                $mail->Port       = 587;
+
+                //Recipients
+                $mail->setFrom('fathimahazbin1234@gmail.com', 'Pharmio'); // Set your email address and name
+                $mail->addAddress($username); // Add recipient email
+
+                //Content
+                $mail->isHTML(true);
+                $mail->Subject = 'Password Reset';
+                $mail->Body    = "Click the following link to reset your password: <a href='http://localhost/project/forgot_password_process.phpreset_password.php?token=$resetToken'>Reset Password</a>";
+
+                $mail->send();
+                echo "Password reset email sent. Please check your email.";
+            } catch (Exception $e) {
+                echo "Failed to send reset email. Error: {$mail->ErrorInfo}";
             }
         } else {
-            echo "Email not found in the database.";
+            echo "Error updating token: " . $conn->error;
         }
-        
-        $conn->close();
+    } else {
+        echo "Email not found in the database.";
     }
-    ?>
+    
+    $conn->close();
+}
+?>
