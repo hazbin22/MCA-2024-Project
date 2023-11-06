@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['submit'])) {
         echo "<script>alert('Username already exists! Please choose a different username.'); window.location.href='register.php';</script>";
     } else {
         // Hash the password (for security)
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
         // Generate a verification token
         $verificationToken = bin2hex(random_bytes(32));

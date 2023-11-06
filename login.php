@@ -10,41 +10,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['email'];
     $password = $_POST['password'];
 
-    $hashed_password = md5($password);
+    // Retrieve hashed password from the database
+    $sql = "SELECT * FROM customer_details WHERE username='$username' AND verify_status=1";
+    $result = $conn->query($sql);
 
-    // Check if the user is a client and verify_status is 1
-    $sql_cust = "SELECT * FROM customer_details WHERE username='$username' AND password='$hashed_password' AND verify_status=1";
-    $result_cust = $conn->query($sql_cust);
-
-    if (!$result_cust) {
+    if (!$result) {
         die("SQL query failed: " . $conn->error);
     }
 
-    if ($result_cust->num_rows > 0) {
-        // Client login successful
-        $_SESSION['username'] = $username; // Set session variable  
-        header('Location: customer.php');
+    if ($result->num_rows > 0) {
+        $row = $result->fetch_assoc();
+        $hashed_password = $row['password'];
+
+        // Verify the password using password_verify
+        if (password_verify($password, $hashed_password)) {
+            // Password is correct, login successful
+            $_SESSION['username'] = $username;
+            header('Location: customer.php');
+            exit();
+        }
+    }
+
+    // Admin credentials (assuming you store hashed admin password in the database)
+    $admin_username = "admin";
+    $admin_password = "hashed_admin_password_from_database";
+
+    // Verify the admin password using password_verify
+    if ($username === $admin_username && password_verify($password, $admin_password)) {
+        // Admin login successful
+        $_SESSION['admin'] = $username;
+        header('Location: admin.php');
         exit();
     }
 
-    // Admin credentials
-        $admin_username = "admin";
-        $admin_plain_password = "admin@12345";
-
-        // Hash the admin password
-        $admin_hashed_password = password_hash($admin_plain_password, PASSWORD_DEFAULT);
-
-        // Check if the user is an admin
-        if ($username === $admin_username && password_verify($password, $admin_hashed_password)) {
-            // Admin login successful
-            $_SESSION['admin'] = $username;
-            header('Location: admin.php');
-            exit();
-        }
-
-        // If neither client nor admin, or verify_status is 0, display an error message
-        echo "<script>alert('Invalid username, password, or account not verified. Please try again.'); window.location.href='login.php';</script>";
-    }
+    // If neither client nor admin, or verify_status is 0, display an error message
+    echo "<script>alert('Invalid username, password, or account not verified. Please try again.'); window.location.href='login.php';</script>";
+}
 
 $conn->close();
 ?>
