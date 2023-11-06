@@ -1,3 +1,12 @@
+<?php
+include('db_config.php');
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header('Location: login.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,7 +68,7 @@
 
   <div class="hero_bg_box">
       <div class="bg_img_box">
-        <img src="images/img31.jpg" width="100%" height="100%">
+        <img src="" width="100%" height="100%">
       </div>
     </div>
 
@@ -74,12 +83,11 @@
           </a>
 
           
-          
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav  ">
-              <li class="nav-item   ">
-                <a class="nav-link" href="customer.php">Home <span class="sr-only">(current)</span></a>
+              <li class="nav-item active">
+                <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="">About</a>
@@ -87,14 +95,10 @@
               <li class="nav-item">
                 <a class="nav-link" href="">SHOP</a>
               <li class="nav-item">
-                <a class="nav-link" href="cust_profile.php">My Profile</a>
+                <a class="nav-link" href="edit_profile.php">My Profile</a>
               </li>
               <li class="nav-item">
-              <form action="logout.php" method="post">
-                <button type="submit" class="nav-link logout-button" name="logout">
-                    <i class="fa fa-user" aria-hidden="true"></i> Logout
-                </button>
-              </form>
+                <a class="nav-link" href="logout.php"> <i class="fa fa-user" aria-hidden="true"></i> LogOut</a>
               </li>
               
             </ul>
@@ -102,9 +106,7 @@
         </nav>
       </div>
     </header>
-
-
+            
     
-
 </body>
 </html>

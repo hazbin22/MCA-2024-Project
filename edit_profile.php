@@ -1,80 +1,91 @@
+<?php
+include('db_config.php');
+session_start();
+
+if (!isset($_SESSION['username'])) {
+    header('Location: login.php');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profile</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Customer Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .profile-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+
+        .profile-picture {
+            width: 150px;
+            height: 150px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin: 0 auto 20px auto;
+            background-size: cover;
+            background-position: center;
+            cursor: pointer;
+        }
+
+        .edit-icon {
+            font-size: 24px;
+            color: #007bff;
+            cursor: pointer;
+        }
+
+        .profile-info {
+            text-align: left;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .profile-info div {
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-container {
+                width: 80%;
+            }
+        }
+    </style>
 </head>
-<style>
-    body {
-    font-family: Arial, sans-serif;
-    background-color: #f2f2f2;
-}
-
-.container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: white;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    margin-top: 50px;
-}
-
-form {
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    margin-bottom: 10px;
-}
-
-input {
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-button {
-    background-color: #4caf50;
-    color: white;
-    padding: 15px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-button:hover {
-    background-color: #45a049;
-}
-
-</style>
 
 <body>
-    <div class="container">
-        <h2>Edit Profile</h2>
-        <form action="update_profile.php" method="post">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" value="<?php echo $customer['username']; ?>" readonly>
-
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" value="<?php echo $customer['first_name']; ?>" required>
-
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" value="<?php echo $customer['last_name']; ?>" required>
-
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" value="<?php echo $customer['email']; ?>" required>
-
-            <button type="submit" name="save">Save</button>
-        </form>
+    <div class="profile-container">
+        <div class="profile-picture" id="profilePicture" style="background-image: url('placeholder.jpg');">
+            <div class="edit-icon" onclick="changeProfilePicture()">✏️</div>
+        </div>
+        <div class="profile-info">
+            <div><strong>Username:</strong> johndoe123</div>
+            <div><strong>First Name:</strong> John</div>
+            <div><strong>Last Name:</strong> Doe</div>
+            <div><strong>Email:</strong> johndoe@example.com</div>
+        </div>
     </div>
+
+    <script>
+       
+
+    </script>
 </body>
 
 </html>

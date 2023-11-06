@@ -12,7 +12,7 @@ header("Pragma: no-cache");
 header("Expires: Sat, 26 Jul 1997 05:00:00 GMT");
 
 // Redirect to the login page or any other page you want after logout
-header("Location: login.php");
+header("Location: index.php");
 exit();
 ?>
 

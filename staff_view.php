@@ -188,5 +188,36 @@
             ?>
         </table>    
     </div>  
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            var menuItems = document.querySelectorAll(".menu-item");
+            menuItems.forEach(function(item) {
+                item.addEventListener("click", function() {
+                    // Toggle submenu for the clicked item
+                    var submenu = item.nextElementSibling;
+                    if (submenu) {
+                        if (submenu.style.display === "block") {
+                            submenu.style.display = "none";
+                            item.classList.remove("active");
+                        } else {
+                            // Hide all submenus
+                            var submenus = document.querySelectorAll(".submenu");
+                            submenus.forEach(function(submenu) {
+                                submenu.style.display = "none";
+                            });
+
+                            submenu.style.display = "block";
+                            // Toggle active class for menu items
+                            menuItems.forEach(function(menuItem) {
+                                menuItem.classList.remove("active");
+                            });
+                            item.classList.add("active");
+                        }
+                    }
+                });
+            });
+        });
+    </script>
     </body>
 </html>

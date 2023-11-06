@@ -29,7 +29,35 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Mobile Metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- Site Metas -->
+        <meta name="keywords" content="" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <link rel="shortcut icon" href="images/favicon.png" type="">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
     <title>Customer Profile</title>
+
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+
+    <!-- fonts style -->
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+        <!--owl slider stylesheet -->
+        <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+
+        <!-- font awesome style -->
+        <link href="css/font-awesome.min.css" rel="stylesheet" />
+
+        <!-- Custom styles for this template -->
+        <link href="css/style1.css" rel="stylesheet" />
+        <!-- responsive style -->
+            <link href="css/style1.css" rel="stylesheet" />
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="styles.css">
     <style>
         body {
@@ -82,6 +110,43 @@ $conn->close();
 </head>
 
 <body>
+
+     <!-- header section strats -->
+    <header class="header_section">
+      <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg custom_nav-container ">
+          <a class="navbar-brand" href="index.php">
+            <span>
+              PHARMIO
+            </span>
+          </a>
+
+          
+
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav  ">
+              <li class="nav-item active">
+                <a class="nav-link" href="index.php">Home <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="">About</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="">SHOP</a>
+              <li class="nav-item">
+                <a class="nav-link" href="register.php">REGISTER</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="login.php"> <i class="fa fa-user" aria-hidden="true"></i> Login</a>
+              </li>
+              
+            </ul>
+          </div>
+        </nav>
+      </div>
+    </header>
+    
+
     <div class="container">
         <h2>Customer Profile</h2>
         <a href="edit_profile.php">Edit Profile</a>

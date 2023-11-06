@@ -1,7 +1,5 @@
-
 <?php
 include('db_config.php');
-
 session_start();
 
 if ($conn->connect_error) {
@@ -14,10 +12,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $hashed_password = md5($password);
 
-    // Check if the user is a client
-    echo "SQL query: " . $sql_cust; // Before executing the query
-
-    $sql_cust = "SELECT * FROM customer_details WHERE username='$username' AND password='$hashed_password'";
+    // Check if the user is a client and verify_status is 1
+    $sql_cust = "SELECT * FROM customer_details WHERE username='$username' AND password='$hashed_password' AND verify_status=1";
     $result_cust = $conn->query($sql_cust);
 
     if (!$result_cust) {
@@ -31,28 +27,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
-    // Check if the user is an admin
-    $sql_admin = "SELECT * FROM admin WHERE username='$username' AND password='$hashed_password'";
-    $result_admin = $conn->query($sql_admin);
+    // Admin credentials
+        $admin_username = "admin";
+        $admin_plain_password = "admin@12345";
 
-    if (!$result_admin) {
-        die("SQL query failed: " . $conn->error);
+        // Hash the admin password
+        $admin_hashed_password = password_hash($admin_plain_password, PASSWORD_DEFAULT);
+
+        // Check if the user is an admin
+        if ($username === $admin_username && password_verify($password, $admin_hashed_password)) {
+            // Admin login successful
+            $_SESSION['admin'] = $username;
+            header('Location: admin.php');
+            exit();
+        }
+
+        // If neither client nor admin, or verify_status is 0, display an error message
+        echo "<script>alert('Invalid username, password, or account not verified. Please try again.'); window.location.href='login.php';</script>";
     }
-
-    if ($result_admin->num_rows > 0) {
-        // Admin login successful
-        $_SESSION['admin'] = $username;
-        header('Location: admin.php');
-        exit();
-    }
-
-    // If neither client nor admin, display an error message
-    echo "<script>alert('Invalid username or password. Please try again.'); window.location.href='login.php';</script>";
-
-}
 
 $conn->close();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
