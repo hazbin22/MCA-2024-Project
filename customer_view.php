@@ -53,7 +53,7 @@ if (!isset($_SESSION['admin'])) {
         .container {
           max-width: 800px;
           margin: 0px auto;
-          margin-top: 1px;
+          margin-top: 70px;
           padding: 20px;
           margin-left: 250px;
         }
@@ -66,207 +66,220 @@ if (!isset($_SESSION['admin'])) {
           float: right;
         }
 
-    /* Sidebar Styles */
-    .sidebar {
-        height: 100%;
-        width: 250px;
-        position: fixed;
-        top: 76px;
-        left: 0;
-        background-color: #f2f2f2;
-        padding-top: 20px;
-    }
+        /* Sidebar Styles */
+        .sidebar {
+            height: 100%;
+            width: 250px;
+            position: fixed;
+            top: 76px;
+            left: 0;
+            background-color: #f9f9f9;
+            padding-top: 20px;
+        }
 
-    .sidebar h1 {
+        .sidebar h1 {
+            text-align: left;
+            margin-left: 13px;
+            font-weight: bold;
+            font-size: 30px;
+        }
+
+        .sidebar a.menu-item {
+            padding: 8px 16px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #333;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar .submenu {
+            padding-left: 20px;
+            display: none;
+        }
+
+        .sidebar .submenu a.sub-item {
+            padding: 8px 0;
+            color: #555;
+        }
+
+        .sidebar a.menu-item.active {
+            background-color: #ddd;
+        }
+
+        /* Content Styles */
+        .content {
+        margin-left: 250px;
+        padding: 20px;
+        }
+
+        table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        }
+
+        th, td {
+        border: 1px solid #ddd;
+        padding: 10px;
         text-align: left;
-        margin-left: 13px;
-        font-weight: bold;
-        font-size: 30px;
-    }
+        }
 
-    .sidebar a.menu-item {
-        padding: 8px 16px;
-        text-decoration: none;
-        font-size: 18px;
-        color: #333;
-        display: block;
-        transition: 0.3s;
-    }
+        th {
+        background-color: #f2f2f2;
+        }
 
-    .sidebar .submenu {
-        padding-left: 20px;
-        display: none;
-    }
-
-    .sidebar .submenu a.sub-item {
-        padding: 8px 0;
-        color: #555;
-    }
-
-    .sidebar a.menu-item.active {
-        background-color: #ddd;
-    }
-
-    /* Content Styles */
-    .content {
-      margin-left: 250px;
-      padding: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      text-align: left;
-    }
-
-    th {
-      background-color: #f2f2f2;
-    }
-
-    .confirmation-dialog {
-      position: absolute;
-      background-color: #fff;
-      border: 1px solid #ccc;
-      padding: 20px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      z-index: 9999;
-      display: none;
-    }
-
-    .confirmation-dialog-buttons {
-      margin-top: 20px;
-      text-align: right;
-    }
-
-    .confirmation-dialog-buttons button {
-      margin-left: 10px;
-    }
-
-    .dashboard-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    .logout-button {
-      background-color: #007bff;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-    }
-
-    .logout-button:hover {
-      background-color: #0056b3;
-    }
-    /* Add this CSS to style the deactivate button and dialogs */
-    .deactivate-button {
-        background-color: #4caf50; /* Green */
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .deactivate-button:hover {
-        background-color: #45a049; /* Darker Green */
-    }
-
-    .confirmation-dialog,
-    .input-dialog {
-        display: none;
-        /* other styles */
-    }
-
-
-    .confirmation-dialog {
+        .confirmation-dialog {
         position: absolute;
         background-color: #fff;
         border: 1px solid #ccc;
-        padding: 10px;
+        padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         z-index: 9999;
         display: none;
-    }
+        }
 
-    .confirmation-dialog-buttons {
+        .confirmation-dialog-buttons {
         margin-top: 20px;
         text-align: right;
-    }
-
-    .confirmation-dialog-buttons button {
-            margin-left: 10px;
-        }
-        /* Add this CSS to style the confirmation and input dialogs responsively */
-    @media (max-width: 768px) {
-        .confirmation-dialog {
-            width: 80%;
         }
 
-        .input-dialog {
-            width: 90%;
+        .confirmation-dialog-buttons button {
+        margin-left: 10px;
         }
-    }
 
-    /* Add styles for the input dialog */
-    .input-dialog {
-        position: absolute;
-        background-color: #fff;
-        border: 1px solid #ccc;
-        padding: 10px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        display: none;
-        width: 800px;
-        height: 50%
-    }
+        .dashboard-link {
+        text-decoration: none;
+        color: inherit;
+        }
 
-    .input-dialog label {
-        display: block;
-        margin-bottom: 10px;
-    }
-
-    .input-dialog input {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        height: 50px;
-    }
-
-    .input-dialog button {
-        background-color: #4caf50;
-        color: #fff;
-        border: none;
-        padding: 10px 20px;
-        cursor: pointer;
-    }
-
-    .input-dialog button:hover {
-        background-color: #45a049;
-    }
-    .deactivate-button.deactivated {
-        background-color: #ff5757; /* Red */
-        color: #fff;
+        .logout-button {
+        background-color: #007bff;
+        color: white;
         border: none;
         padding: 10px 20px;
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-    }
+        }
 
-    .deactivate-button.deactivated:hover {
-        background-color: #ff4141; /* Darker Red */
-    }
+        .logout-button:hover {
+        background-color: #0056b3;
+        }
+
+        .header_section {
+            position: fixed;
+            width: 100%;
+            background-color: #f2f2f2; /* Set your desired background color for the header */
+            z-index: 1000;
+        }
+
+        .content {
+            margin-top: 76px; /* Adjust margin-top value to match the height of the fixed header */
+            padding: 20px;
+        }
+
+        /* Add this CSS to style the deactivate button and dialogs */
+        .deactivate-button {
+            background-color: #4caf50; /* Green */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .deactivate-button:hover {
+            background-color: #45a049; /* Darker Green */
+        }
+
+        .confirmation-dialog,
+        .input-dialog {
+            display: none;
+            /* other styles */
+        }
+
+
+        .confirmation-dialog {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+            display: none;
+        }
+
+        .confirmation-dialog-buttons {
+            margin-top: 20px;
+            text-align: right;
+        }
+
+        .confirmation-dialog-buttons button {
+                margin-left: 10px;
+            }
+            /* Add this CSS to style the confirmation and input dialogs responsively */
+        @media (max-width: 768px) {
+            .confirmation-dialog {
+                width: 80%;
+            }
+
+            .input-dialog {
+                width: 90%;
+            }
+        }
+
+        /* Add styles for the input dialog */
+        .input-dialog {
+            position: absolute;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            padding: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            width: 800px;
+            height: 50%
+        }
+
+        .input-dialog label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .input-dialog input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            height: 50px;
+        }
+
+        .input-dialog button {
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+        .input-dialog button:hover {
+            background-color: #45a049;
+        }
+        .deactivate-button.deactivated {
+            background-color: #ff5757; /* Red */
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .deactivate-button.deactivated:hover {
+            background-color: #ff4141; /* Darker Red */
+        }
 
 </style>
 
@@ -541,7 +554,7 @@ if (!isset($_SESSION['admin'])) {
 
             inputDialog.innerHTML = `
                 <label for="deactivationReason">Reason for Deactivation:</label>
-                <input type="text" id="deactivationReason" />
+                <textarea id="deactivationReason" rows="20" cols="95"></textarea>
                 <div class="error-message" style="color: red;"></div>
                 <button class="confirmation-button" id="confirmDeactivation">Confirm</button>
             `;
@@ -570,16 +583,13 @@ if (!isset($_SESSION['admin'])) {
                             alert('Customer deactivated successfully and email sent!');
                             // Close the input dialog after successful deactivation
                             inputDialog.style.display = 'none';
-                        } else {
-                            alert('Failed to deactivate customer. Please try again.');
-                        }
+                        } 
                     }
                 });
             });
             return inputDialog;
         }
       });
-
 
     </script>
     </body>

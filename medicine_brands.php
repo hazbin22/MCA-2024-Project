@@ -150,14 +150,13 @@ if (!isset($_SESSION['admin'])) {
         width: 100%;
         border-collapse: collapse;
         margin-top: 20px;
-        overflow-x: auto;
     }
 
     th, td {
         border: 1px solid #ddd;
         padding: 12px;
         text-align: left;
-
+        white-space: nowrap; /* Prevent line breaks in column headings */
         overflow: hidden; /* Hide overflowing content */
         text-overflow: ellipsis; /* Show ellipsis (...) when content overflows */
     }
@@ -254,15 +253,6 @@ if (!isset($_SESSION['admin'])) {
     .modal-buttons button:hover {
         background-color: #0056b3;
     }
-    /* CSS for buttons in the table */
-    .action-buttons {
-        display: flex;
-        align-items: center;
-    }
-
-    .action-buttons .btn {
-        margin-right: 10px; /* Adjust the margin as needed to create space between the buttons */
-    }
 
 
 </style>
@@ -322,86 +312,25 @@ if (!isset($_SESSION['admin'])) {
 
     <!-- Add Medicines Management Table and Add Medicine Link -->
 <div class="container">
-    <h2>Medicines</h2>
-    <a href="add_medicine.php" class="btn btn-primary mb-3">Add Stock</a>
+    <h2>Brands</h2>
+    <a href="add_brand.php" class="btn btn-primary mb-3">Add Category</a>
     <table class="table">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Medicine Name</th>
-                <th>Generic Name</th>
-                <th>Brand ID</th>
-                <th>Batch Number</th>
-                <th>Manufacturing Date</th>
-                <th>Expiry Date</th>
-                <th>Specification</th>
-                <th>Category ID</th>
-                <th>Stock</th>
-                <th>Price</th>
-                <th>Prescription</th>
-                <th>Images</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-                $sql = "SELECT * FROM medicines";
-                $result = $conn->query($sql);
-                while ($row = $result->fetch_assoc()) {
-                    echo "<tr>";
-                    echo "<td>" . $row["Med_id"] . "</td>";
-                    echo "<td>" . $row["Med_name"] . "</td>";
-                    echo "<td>" . $row["generic_name"] . "</td>";
-                    echo "<td>" . $row["Brand_id"] . "</td>";
-                    echo "<td>" . $row["Batchno"] . "</td>";
-                    echo "<td>" . $row["Manuf_date"] . "</td>";
-                    echo "<td>" . $row["Exp_date"] . "</td>";
-                    echo "<td>" . $row["Specification"] . "</td>";
-                    echo "<td>" . $row["Category_id"] . "</td>";
-                    echo "<td>" . $row["Stock"] . "</td>";
-                    echo "<td>" . $row["Price"] . "</td>";
-                    echo "<td>" . $row["Prescription"] . "</td>";
-                    echo "<td>" . $row["Images"] . "</td>";
-                    echo "<td>";
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Brad Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
                     
-                    // Check status and display appropriate button or text
-                    if ($row["Status"] == 1) {  
-                        echo "<div class='action-buttons'>";
-                        echo "<a href='edit_medicine.php?id=" . $row["Med_id"] . "' class='btn btn-primary btn-sm'>Edit</a>";
-                        echo "<a href='delete_medicine.php?id=" . $row["Med_id"] . "' class='btn btn-danger btn-sm'>Delete</a>";
-                        echo "</div>";
-                    } else {
-                        echo "<div class='action-buttons'>";
-                        echo "<a href='edit_medicine.php?id=" . $row["Med_id"] . "' class='btn btn-primary btn-sm'>Edit</a>&nbsp";
-                        echo "<span class='badge badge-warning'>Out of Stock</span>";
-                        echo "</div>";
-
-
-                    }
-                
-                    echo "</td>";
-                    echo "</tr>";
-                }
-                
-            ?>
-        </tbody>
-    </table>
-
+        ?>
+    </tbody>
+    </table>   
 </div>
-
-<!-- Confirmation Modal -->
-<div class="modal" id="confirmationModal">
-  <div class="modal-content">
-    <p>Are you sure you want to delete this medicine?</p>
-    <div class="modal-buttons">
-      <button id="confirmDelete">Yes</button>
-      <button id="cancelDelete">No</button>
-    </div>
-  </div>
-</div>
-
-
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", function() {
           var menuItems = document.querySelectorAll(".menu-item");
@@ -432,56 +361,6 @@ if (!isset($_SESSION['admin'])) {
           });
         });
 
-        document.addEventListener("DOMContentLoaded", function() {
-        // Get the delete buttons and confirmation modal
-        var deleteButtons = document.querySelectorAll(".delete-btn");
-        var confirmationModal = document.getElementById("confirmationModal");
-        var confirmDeleteButton = document.getElementById("confirmDelete");
-        var cancelDeleteButton = document.getElementById("cancelDelete");
-
-        // Function to show the confirmation modal
-        function showConfirmationModal(event) {
-            event.preventDefault();
-            // Remove click event listeners from all delete buttons
-            deleteButtons.forEach(function(button) {
-                button.removeEventListener("click", showConfirmationModal);
-            });
-            confirmationModal.style.display = "block";
-        }
-
-        // Function to hide the confirmation modal
-        function hideConfirmationModal() {
-            // Add click event listeners back to delete buttons
-            deleteButtons.forEach(function(button) {
-                button.addEventListener("click", showConfirmationModal);
-            });
-            confirmationModal.style.display = "none";
-        }
-
-        // Add click event listeners to delete buttons
-        deleteButtons.forEach(function(button) {
-            button.addEventListener("click", showConfirmationModal);
-        });
-
-        // Add click event listener to confirm delete button
-        confirmDeleteButton.addEventListener("click", function() {
-            // Perform the delete operation (you can redirect to delete_medicine.php here)
-            alert("Medicine deleted!"); // Replace this with your actual delete logic
-
-            // Hide the confirmation modal
-            hideConfirmationModal();
-        });
-
-        // Add click event listener to cancel delete button
-        cancelDeleteButton.addEventListener("click", hideConfirmationModal);
-
-        // Close the modal if clicked outside of it
-        window.addEventListener("click", function(event) {
-            if (event.target == confirmationModal) {
-                hideConfirmationModal();
-            }
-        });
-    });
 
     </script>
     </body>
