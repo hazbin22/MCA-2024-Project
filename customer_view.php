@@ -320,7 +320,6 @@ if (!isset($_SESSION['admin'])) {
     <h1>Dashboard</h1>
     <a href="#" class="menu-item">Customer</a>
     <div class="submenu">
-        <a href="" class="sub-item">View Customers</a><br>
         <a href="customer_view.php" class="sub-item">Manage Customers</a>
     </div>
     <a href="#" class="menu-item">Staff</a>
@@ -330,8 +329,9 @@ if (!isset($_SESSION['admin'])) {
     </div>
     <a href="#" class="menu-item">Medicines</a>
     <div class="submenu">
-        <a href="" class="sub-item">View Medicines</a><br>
-        <a href="medicine_view.php" class="sub-item">Manage Medicines</a>
+        <a href="medicine_view.php" class="sub-item">Manage Medicines</a><br>
+        <a href="medicine_category.php" class="sub-item">Manage Categories</a><br>
+        <a href="medicine_brands.php" class="sub-item">Manage Brands</a><br>
     </div>
 </div>
 
@@ -507,6 +507,7 @@ if (!isset($_SESSION['admin'])) {
                                       location.reload();
                                   } else {
                                       alert('Failed to deactivate customer. Please try again.');
+                                      location.reload();
                                   }
                               }
                           });

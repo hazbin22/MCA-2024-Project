@@ -283,7 +283,7 @@ if (!isset($_SESSION['admin'])) {
     <header class="header_section">
       <div class="container-fluid">
         <nav class="navbar navbar-expand-lg custom_nav-container ">
-          <a class="navbar-brand" href="index.php">
+          <a class="navbar-brand" href="admin.php">
             <span>
               PHARMIO ADMIN
             </span>
@@ -304,7 +304,6 @@ if (!isset($_SESSION['admin'])) {
     <h1>Dashboard</h1>
     <a href="#" class="menu-item">Customer</a>
     <div class="submenu">
-        <a href="" class="sub-item">View Customers</a><br>
         <a href="customer_view.php" class="sub-item">Manage Customers</a>
     </div>
     <a href="#" class="menu-item">Staff</a>
@@ -314,7 +313,7 @@ if (!isset($_SESSION['admin'])) {
     </div>
     <a href="#" class="menu-item">Medicines</a>
     <div class="submenu">
-        <a href="medicine_view.php" class="sub-item">Manage Medicines</a>
+        <a href="medicine_view.php" class="sub-item">Manage Medicines</a><br>
         <a href="medicine_category.php" class="sub-item">Manage Categories</a><br>
         <a href="medicine_brands.php" class="sub-item">Manage Brands</a><br>
     </div>
@@ -327,15 +326,15 @@ if (!isset($_SESSION['admin'])) {
     <table class="table">
         <thead>
             <tr>
-                <th>ID</th>
+                <th>Sl No.</th>
                 <th>Medicine Name</th>
                 <th>Generic Name</th>
-                <th>Brand ID</th>
+                <th>Brand Name</th>
                 <th>Batch Number</th>
                 <th>Manufacturing Date</th>
                 <th>Expiry Date</th>
                 <th>Specification</th>
-                <th>Category ID</th>
+                <th>Category Name</th>
                 <th>Stock</th>
                 <th>Price</th>
                 <th>Prescription</th>
@@ -345,59 +344,52 @@ if (!isset($_SESSION['admin'])) {
         </thead>
         <tbody>
             <?php
-                $sql = "SELECT * FROM medicines";
+                $sql = "SELECT m.*, c.Category_name, b.Brand_name FROM medicines m
+                        LEFT JOIN category_details c ON m.Category_id = c.Category_id
+                        LEFT JOIN brand_details b ON m.Brand_id = b.Brand_id
+                        ORDER BY m.Med_name";
                 $result = $conn->query($sql);
+
+                // Counter for serial number
+                $slNo = 1;
+
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>" . $row["Med_id"] . "</td>";
+                    
+                    echo "<td>" . $slNo . "</td>"; // Display serial number
+                    $slNo++; // Increment serial number for the next row
+
                     echo "<td>" . $row["Med_name"] . "</td>";
                     echo "<td>" . $row["generic_name"] . "</td>";
-                    echo "<td>" . $row["Brand_id"] . "</td>";
+                    echo "<td>" . $row["Brand_name"] . "</td>";
                     echo "<td>" . $row["Batchno"] . "</td>";
                     echo "<td>" . $row["Manuf_date"] . "</td>";
                     echo "<td>" . $row["Exp_date"] . "</td>";
                     echo "<td>" . $row["Specification"] . "</td>";
-                    echo "<td>" . $row["Category_id"] . "</td>";
+                    echo "<td>" . $row["Category_name"] . "</td>";
                     echo "<td>" . $row["Stock"] . "</td>";
                     echo "<td>" . $row["Price"] . "</td>";
                     echo "<td>" . $row["Prescription"] . "</td>";
-                    echo "<td>" . $row["Images"] . "</td>";
+                    echo "<td><img src='data:image/jpeg;base64," . base64_encode($row['Images']) . "' alt='Medicine Image' style='max-width:100px; max-height:100px;'></td>";
                     echo "<td>";
                     
-                    // Check status and display appropriate button or text
-                    if ($row["Status"] == 1) {  
+                    if ($row["Status"] == 1) {
                         echo "<div class='action-buttons'>";
                         echo "<a href='edit_medicine.php?id=" . $row["Med_id"] . "' class='btn btn-primary btn-sm'>Edit</a>";
-                        echo "<a href='delete_medicine.php?id=" . $row["Med_id"] . "' class='btn btn-danger btn-sm'>Delete</a>";
+                        echo "<button class='btn btn-danger btn-sm delete-btn' data-medicine-id='" . $row["Med_id"] . "'>Disable</button>";
                         echo "</div>";
-                    } else {
+                      } else {
                         echo "<div class='action-buttons'>";
                         echo "<a href='edit_medicine.php?id=" . $row["Med_id"] . "' class='btn btn-primary btn-sm'>Edit</a>&nbsp";
                         echo "<span class='badge badge-warning'>Out of Stock</span>";
                         echo "</div>";
-
-
+                      }
+                      echo "</td>";
+                      echo "</tr>";
                     }
-                
-                    echo "</td>";
-                    echo "</tr>";
-                }
-                
-            ?>
+                ?>
         </tbody>
     </table>
-
-</div>
-
-<!-- Confirmation Modal -->
-<div class="modal" id="confirmationModal">
-  <div class="modal-content">
-    <p>Are you sure you want to delete this medicine?</p>
-    <div class="modal-buttons">
-      <button id="confirmDelete">Yes</button>
-      <button id="cancelDelete">No</button>
-    </div>
-  </div>
 </div>
 
 
@@ -432,59 +424,21 @@ if (!isset($_SESSION['admin'])) {
           });
         });
 
-        document.addEventListener("DOMContentLoaded", function() {
-        // Get the delete buttons and confirmation modal
-        var deleteButtons = document.querySelectorAll(".delete-btn");
-        var confirmationModal = document.getElementById("confirmationModal");
-        var confirmDeleteButton = document.getElementById("confirmDelete");
-        var cancelDeleteButton = document.getElementById("cancelDelete");
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            $(document).ready(function () {
+            // Add click event listener to each delete button
+            $(".delete-btn").on("click", function (event) {
+                event.preventDefault();
+                var medicineId = $(this).data("medicine-id");
 
-        // Function to show the confirmation modal
-        function showConfirmationModal(event) {
-            event.preventDefault();
-            // Remove click event listeners from all delete buttons
-            deleteButtons.forEach(function(button) {
-                button.removeEventListener("click", showConfirmationModal);
+                // Directly redirect to update_status.php with medicineId as a parameter
+                window.location.href = "manage_medicines.php?id=" + medicineId;
             });
-            confirmationModal.style.display = "block";
-        }
-
-        // Function to hide the confirmation modal
-        function hideConfirmationModal() {
-            // Add click event listeners back to delete buttons
-            deleteButtons.forEach(function(button) {
-                button.addEventListener("click", showConfirmationModal);
             });
-            confirmationModal.style.display = "none";
-        }
-
-        // Add click event listeners to delete buttons
-        deleteButtons.forEach(function(button) {
-            button.addEventListener("click", showConfirmationModal);
-        });
-
-        // Add click event listener to confirm delete button
-        confirmDeleteButton.addEventListener("click", function() {
-            // Perform the delete operation (you can redirect to delete_medicine.php here)
-            alert("Medicine deleted!"); // Replace this with your actual delete logic
-
-            // Hide the confirmation modal
-            hideConfirmationModal();
-        });
-
-        // Add click event listener to cancel delete button
-        cancelDeleteButton.addEventListener("click", hideConfirmationModal);
-
-        // Close the modal if clicked outside of it
-        window.addEventListener("click", function(event) {
-            if (event.target == confirmationModal) {
-                hideConfirmationModal();
-            }
-        });
-    });
-
+        </script>
     </script>
-    </body>
+</body>
 </html>
 
 

@@ -42,7 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 //Content
                 $mail->isHTML(true);
                 $mail->Subject = 'Password Reset';
-                $mail->Body    = "Click the following link to reset your password: <a href='http://localhost/project/forgot_password_process.phpreset_password.php?token=$resetToken'>Reset Password</a>";
+                $mail->Body    = "Click the following link to reset your password: <a href='http://localhost/project/reset_password.php?token=$resetToken'>Reset Password</a>";
 
                 $mail->send();
                 echo "Password reset email sent. Please check your email.";

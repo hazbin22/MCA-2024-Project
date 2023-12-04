@@ -34,7 +34,6 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
 
-
   <title> Pharmio </title>
 
   <!-- bootstrap core css -->
@@ -74,10 +73,10 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: flex-start;
-        padding: 10px;
+        padding: 20px;
     }
 
-    .product-grid {
+    .product-list {
         margin-left: 250px; /* Set margin equal to the width of the sidebar */
         display: flex;
         flex-wrap: wrap;
@@ -85,11 +84,74 @@
         padding: 20px;
     }
 
+    .cart-heading {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .cart-heading h2 {
+        font-size: 24px;
+        font-weight: bold;
+        border-bottom: none; /* Remove the underline */
+        padding-bottom: 10px;
+        display: inline-block; /* Ensures the border only spans the width of the text */
+    }
+
+    .cart-heading h2::before {
+        content: '\1F6D2'; /* Unicode for a shopping cart symbol */
+        margin-right: 10px;
+        font-size: 30px; /* Adjust the size of the cart symbol as needed */
+    }
+
+    .main-content {
+        display: flex;
+    }
+
+    .product-list {
+        flex-grow: 1;
+        margin-right: 20px;
+    }
+
+    .cart-actions {
+        width: 200px; /* Adjust the width as needed */
+    }
+    .cart-summary {
+        width: 350px; /* Adjust the width as needed */
+        padding: 20px;
+        background-color: #fff;
+        border: 0px solid #fff;
+        border-radius: 0px;
+        margin-left: 30px; /* Adjust the margin to create space between product list and cart summary */
+    }
+
+    .cart-summary p,
+    .cart-summary button {
+        margin-bottom: 10px; /* Add margin to create space between elements */
+    }
+
+    /* Additional styles for the checkout button */
+    .checkout-button {
+        width: 100%;
+        padding: 10px;
+        background-color: #000;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        font-size: 14px;
+    }
+
+    .checkout-button:hover {
+        background-color: #333;
+    }
+
     .product-card {
-        /* width: 340px; */
+        display: flex; /* Make the product card a flex container */
         border: 1px solid #ddd;
         border-radius: 8px;
-        padding: 30px;
+        padding: 20px;
         margin: 10px;
         text-align: center;
         overflow-wrap: break-word;
@@ -98,9 +160,10 @@
     }
 
     .product-card img {
-        max-width: 100%;
-        height: auto;
-        margin-bottom: 10px;
+        width: 200px; /* Set the desired width */
+        height: 150px; /* Set the desired height */
+        object-fit: cover; /* Maintain aspect ratio and cover the container */
+        margin-right: 20px; /* Add margin to separate image and details */
     }
 
     .product-card h3 {
@@ -121,7 +184,7 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
-        font-size:14px
+        font-size: 14px;
     }
 
     .product-card button:hover {
@@ -132,24 +195,6 @@
         position: absolute;
         top: 10px;
         right: 10px;
-    }
-
-    .favorites-icon {
-        font-size: 24px;
-        color: #ccc; /* Default color for unfilled heart */
-        cursor: pointer;
-        top: 10px; /* Adjust the top position as needed */
-        right: 20px;
-    }
-
-    .favorites-icon.fas {
-        color: black; /* Color for filled heart */
-    }
-
-    .cart-button,
-    .buy-now-button {
-        width: 100%;
-        margin-top: 10px;
     }
 
     .submenu1 {
@@ -199,7 +244,7 @@
     .sidebar-heading {
         font-size: 24px;
         margin-bottom: 20px;
-        color:black;
+        color: black;
     }
 
     .category-list {
@@ -220,71 +265,17 @@
     .category-list li a:hover {
         text-decoration: underline;
     }
+
     a {
         text-decoration: none; /* Remove underline */
         color: inherit; /* Inherit text color from the parent element */
-    }
-
-    .product-header {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
-
-    .favorites-icon {
-        color: black; /* Change the color as desired */
-        font-size: 24px;
-    }
-
-    .cart-button,
-    .buy-now-button {
-        width: 100%;
-        margin-top: 10px;
-    }
-
-    /* Add this CSS to your existing styles or in the <style> tag in the head section */
-    .search-container {
-        text-align: center;
-    }
-
-    .search-container form {
-        display: inline-block;
-    }
-
-    .search-container input[type=text] {
-        padding: 4px;
-        width: 400px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
-
-    .search-container button {
-        padding: 4px;
-        background: black;
-        color: #fff;
-        border: 1px solid black;
-        border-radius: 4px;
-        cursor: pointer;
-    }
-
-    .search-container button:hover {
-        background: #333;
-        border: 1px solid #333;
-    }
-
-    .product-image {
-        width: 200px; /* Set the desired width */
-        height: 150px; /* Set the desired height */
-        object-fit: cover; /* Maintain aspect ratio and cover the container */
-        margin-top: 15px;
     }
   </style>
 </head>
 <body>
 
 <!-- header section strats -->
-<header class="header_section">
+<header class="header_section"> 
     <div class="container-fluid">
     <nav class="navbar navbar-expand-lg custom_nav-container ">
         <a class="navbar-brand" href="customer.php">
@@ -298,7 +289,7 @@
             <div class="search-container">
             <form action="" method="GET">
                 <input type="text" placeholder="Search..." name="search">
-                <button type="submit"onclick=searchMedicine()><i class="fa fa-search"></i></button>
+                <button type="submit" onclick="searchMedicine()"><i class="fa fa-search"></i></button>
             </form>
             </div>
             </li>
@@ -306,7 +297,7 @@
                 <a class="nav-link" href="#"><i class="fas fa-user"></i> <?php echo htmlspecialchars($_SESSION['first_name']); ?><i class="fas fa-angle-down"></i></a>
                 <ul class="submenu1">
                     <li class="nav-item">
-                        <a class="nav-link" href="cust_profile.php"><i class="fas fa-user"></i> My Profile</a>
+                        <a class="nav-link" href="edit_profile.php"><i class="fas fa-user"></i> My Profile</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="cart.php"><i class="fas fa-shopping-cart"></i> My Cart</a>
@@ -343,83 +334,94 @@
     </ul>
 </div>
 <!-- sidebar ends -->
+<div class="main-content">
+    <div class="product-list">
+        <div class="cart-heading">
+            <h2>Your Cart</h2>
+        </div>
+        <div class="cart-products">
+            <?php
+            // Fetch cart items from the database
+            $cartQuery = "SELECT cart_details.quantity, medicines.Med_name, medicines.Images, medicines.Price
+                        FROM cart_details
+                        JOIN medicines ON cart_details.med_id = medicines.med_id
+                        WHERE cart_details.customer_id = (SELECT customer_id FROM customer_details WHERE username = '{$_SESSION['username']}')";
 
-<div class="product-grid">
-<?php
-    // Retrieve medicines from the database
-    $sql = "SELECT * FROM medicines";
-    $result = $conn->query($sql);
+            $cartResult = $conn->query($cartQuery);
 
-    // Check if there are any medicines
-    if ($result->num_rows > 0) {
-?>
-<div class="product-list">
-    <?php
-        // Output data of each row
-        while ($row = $result->fetch_assoc()) {
-            // Assuming $row["Images"] contains the binary image data from the database
-            $imageData = $row["Images"];
+            if ($cartResult->num_rows > 0) {
+                while ($cartRow = $cartResult->fetch_assoc()) {
+                    // Assuming $cartRow["Images"] contains the binary image data from the database
+                    $imageData = $cartRow["Images"];
 
-            // Convert the binary data to base64
-            $base64Image = base64_encode($imageData);
+                    // Convert the binary data to base64
+                    $base64Image = base64_encode($imageData);
 
-            // Initialize $wishlistResult
-            $wishlistResult = null;
+                    // Display the product details
+                    echo "<div class='product-card'>";
+                    echo "<img class='product-image' src='data:image;base64,{$base64Image}'>";
+                    echo "<div class='product-details'>";
+                    echo "<h3>{$cartRow['Med_name']}</h3>";
 
-            // Check if the medicine is in the wishlist for the current customer
-            $wishlistQuery = "SELECT * FROM wish_lists WHERE Customer_id = '{$_SESSION['username']}' AND Med_id = '{$row['Med_id']}'";
-            $wishlistResult = $conn->query($wishlistQuery);
+                    // Check if 'Price' key exists in the array
+                    if (isset($cartRow['Price'])) {
+                        echo "<p>Price: {$cartRow['Price']}</p>";
+                    } else {
+                        echo "<p>Price: Not available</p>";
+                    }
 
-            // Determine if the heart icon should be filled or not
-            $isInWishlist = ($wishlistResult && $wishlistResult->num_rows > 0);
-    ?>
-    <div class="product-card" data-medicine-id="<?php echo $row['Med_id']; ?>">
-    <div class="product-header">
-        <?php
-            // Output the heart icon based on wishlist status
-            if ($isInWishlist) {
-                echo '<i class="favorites-icon fas fa-heart"></i>';
+                    // Check if 'quantity' key exists in the array
+                    if (isset($cartRow['quantity'])) {
+                        echo "<p>Quantity: {$cartRow['quantity']}</p>";
+                    } else {
+                        echo "<p>Quantity: Not available</p>";
+                    }
+
+                    echo "<div class='product-actions'>";
+                    echo "<button class='remove-button'>Remove from cart</button>";
+                    echo "</div>";
+                    echo "</div>";
+                    echo "</div>";
+                }
             } else {
-                echo '<i class="favorites-icon far fa-heart"></i>';
+                echo "<p>Your cart is empty.</p>";
             }
+            ?>
+        </div>
+    </div>
+
+    <div class="cart-summary">
+        <!-- Display total amount and checkout button here -->
+        <?php
+        // Calculate total amount
+        $totalQuery = "SELECT SUM(quantity * price) AS total
+                       FROM cart_details
+                       JOIN medicines ON cart_details.med_id = medicines.med_id
+                       WHERE cart_details.customer_id = (SELECT customer_id FROM customer_details WHERE username = '{$_SESSION['username']}')";
+
+        $totalResult = $conn->query($totalQuery);
+        $totalRow = $totalResult->fetch_assoc();
+        $totalAmount = $totalRow['total'];
+        // After calculating the total amount
+        $_SESSION['total_amount'] = $totalAmount;
+
+
+        echo "<p>Total Amount: $totalAmount</p>";
+        echo "<button class='checkout-button' id='checkoutBtn'>Proceed to Checkout</button>";
         ?>
     </div>
-        <img class="product-image" src="data:image/jpeg;base64,<?php echo $base64Image; ?>" alt="<?php echo $row["Med_name"]; ?>">
-        <a href="medicine_details.php"><h3><?php echo $row["Med_name"]; ?></h3></a>
-        <p>Generic Name: <?php echo $row["generic_name"]; ?></p>
-        <p>Price: Rs.<?php echo $row["Price"]; ?></p>
-        <form action="add_to_cart.php" method="post">
-            <input type="hidden" name="medicineName" value="<?php echo $row['Med_name']; ?>">
-            <button class="cart-button" type="submit">
-                <i class="fas fa-cart-plus"></i> Add to Cart
-            </button>
-        </form>
-        <form action="">
-        <button class="buy-now-button"><i class="fas fa-shopping-cart"></i> Buy Now</button>
-        </form>
-    </div>
-    <?php
-        }
-    ?>
-    </div>
-    <?php
-        } else {
-            echo "No medicines available.";
-        }
-        // Close the database connection
-        $conn->close();
-    ?>
 </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-     function addToCart(medicineName) {
-        // You can use AJAX to send a request to add_to_cart.php
-        // Example using jQuery:
-        $.post("add_to_cart.php", { medicineName: medicineName },
-        function(data) {
-                    alert(data); // You can replace this with any other logic
-        to handle the response
-                });
-            }
+    $(document).ready(function(){
+        // Add a click event listener to the button
+        $('#checkoutBtn').click(function(){
+            // Navigate to payment.php
+            window.location.href = 'payment.php';
+        });
+    });
 </script>
+
 </body>
 </html>

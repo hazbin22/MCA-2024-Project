@@ -60,6 +60,8 @@
 
     button[type="submit"] {
         background-color: #4caf50;
+        margin-left: 150px;
+        text-align:center;
         color: white;
         padding: 10px 20px;
         border: none;
@@ -84,7 +86,7 @@
         <form action="forgot_password_process.php" method="post">
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
-            <button type="submit">Reset Password</button>
+            <button type="submit">Send Link</button>
         </form>
     </div>
 

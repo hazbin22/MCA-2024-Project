@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $deactivateQuery = "UPDATE customer_details SET verify_status = 0 WHERE username = '$username'";
                 if ($conn->query($deactivateQuery) === TRUE) {
                     // Deactivation successful
-
+                    alert('Customer deactivated successfully and email sent!');
                     // Send email using PHPMailer
                     $mail = new PHPMailer(true);
 
@@ -71,6 +71,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     exit();
 }
-
-
 ?>

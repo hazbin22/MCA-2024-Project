@@ -273,7 +273,7 @@ if (!isset($_SESSION['admin'])) {
     <header class="header_section">
       <div class="container-fluid">
         <nav class="navbar navbar-expand-lg custom_nav-container ">
-          <a class="navbar-brand" href="index.php">
+          <a class="navbar-brand" href="admin.php">
             <span>
               PHARMIO ADMIN
             </span>
@@ -294,7 +294,6 @@ if (!isset($_SESSION['admin'])) {
     <h1>Dashboard</h1>
     <a href="#" class="menu-item">Customer</a>
     <div class="submenu">
-        <a href="" class="sub-item">View Customers</a><br>
         <a href="customer_view.php" class="sub-item">Manage Customers</a>
     </div>
     <a href="#" class="menu-item">Staff</a>
@@ -304,7 +303,7 @@ if (!isset($_SESSION['admin'])) {
     </div>
     <a href="#" class="menu-item">Medicines</a>
     <div class="submenu">
-        <a href="medicine_view.php" class="sub-item">Manage Medicines</a>
+        <a href="medicine_view.php" class="sub-item">Manage Medicines</a><br>
         <a href="medicine_category.php" class="sub-item">Manage Categories</a><br>
         <a href="medicine_brands.php" class="sub-item">Manage Brands</a><br>
     </div>
@@ -313,20 +312,64 @@ if (!isset($_SESSION['admin'])) {
     <!-- Add Medicines Management Table and Add Medicine Link -->
 <div class="container">
     <h2>Brands</h2>
-    <a href="add_brand.php" class="btn btn-primary mb-3">Add Category</a>
+    <a href="add_brands.php" class="btn btn-primary mb-3">Add Brands</a>
     <table class="table">
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Brad Name</th>
+            <th>Sl No.</th>
+            <th>Brand Name</th>
             <th>Description</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        <?php
-                    
-        ?>
+    <?php
+        include('db_config.php');
+
+        // Fetch categories from the database
+        $query = "SELECT Brand_id, Brand_name, Brand_details, Status FROM brand_details ORDER BY Brand_name";
+        $result = $conn->query($query);
+
+        // Counter for serial number
+        $slNo = 1;
+
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $categoryId = $row['Brand_id'];
+                $categoryName = $row['Brand_name'];
+                $description = $row['Brand_details'];
+                $status = $row['Status'];
+
+                echo "<tr>";
+
+                echo "<td>" . $slNo . "</td>"; // Display serial number
+                $slNo++; // Increment serial number for the next row
+
+                echo "<td>{$categoryName}</td>";
+                echo "<td>{$description}</td>";
+                echo "<td>";
+                
+                // Disable/Enable button based on status
+                if ($status == 1) {
+                    echo "<a href='category_management.php?id={$categoryId}&&action=disable' class='btn btn-danger'>Disable</a>";
+                } else {
+                    echo "<a href='category_management.php?id={$categoryId}&&action=enable' class='btn btn-success'>Enable</a>";
+                }
+
+                echo "</td>";
+                echo "</tr>";
+            }
+        } else {
+            echo "<tr><td colspan='4'>No categories found</td></tr>";
+        }
+
+        // Close the result set
+        $result->close();
+
+        // Close the connection
+        $conn->close();
+    ?>
+
     </tbody>
     </table>   
 </div>
